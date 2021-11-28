@@ -12,7 +12,7 @@ use Laravel\Dusk\TestCase as BaseTestCase;
 abstract class DuskChromeTestCase extends BaseTestCase
 {
     use CreatesApplication;
-    use DatabaseMigrations;
+    // use DatabaseMigrations;
     // use RefreshDatabase;
 
     /**

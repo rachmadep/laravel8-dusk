@@ -4,38 +4,45 @@ namespace Tests\Browser;
 
 use App\Models\User;
 use Laravel\Dusk\Browser;
-use Tests\DuskChromeTestCase;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\DuskTestCase;
 
-class LoginTest extends DuskChromeTestCase
+class LoginTest extends DuskTestCase
 {
-
     public function testBasicExample()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
-                    ->assertSee('Mau cari kos?');
+                    ->assertSee('Laravel');
         });
     }
 
-    /**
-    * @test
-    * @group login
-    */
-    public function testLogin()
+    public function testRegisterAndLogin()
     {
-        // $user = User::factory()->create();
+        $user = User::factory()->make();
 
-        $this->browse(function ($browser) {
-            $browser->visit('/login-pemilik')
-                    ->type('Nomor Handphone', '089112312306')
-                    ->type('Password', 'qwerty123')
-                    ->press('Login')
-                    ->waitForLocation('/')
-                    // ->waitUntilSee('Pendapatan')
-                    // ->assertSee('Pendapatan')
-                    // ->assertUrlIs('https://owner-jambu.kerupux.com/');
-                    ->assertPathIs('/');
+        $this->browse(function ($browser) use ($user) {
+            $browser->visit('/register')
+                    ->type('name', $user->name)
+                    ->type('email', $user->email)
+                    ->type('password', 'password')
+                    ->type('password_confirmation', 'password')
+                    ->press('REGISTER')
+                    ->assertPathIs('/dashboard');
+
+            $browser->logout();
         });
+
+        $this->assertDatabaseHas('users',['email'=>$user->email]);
+
+        $this->browse(function ($browser) use ($user) {
+            $browser->visit('/login')
+                    ->type('email', $user->email)
+                    ->type('password', 'password')
+                    ->press('LOG IN')
+                    ->assertPathIs('/dashboard');
+
+            $browser->logout();
+        });
+
     }
 }
