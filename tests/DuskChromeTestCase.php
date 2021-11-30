@@ -6,14 +6,12 @@ use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Dusk\TestCase as BaseTestCase;
 
 abstract class DuskChromeTestCase extends BaseTestCase
 {
     use CreatesApplication;
-    use DatabaseMigrations;
-    // use RefreshDatabase;
+    // use DatabaseMigrations;
 
     /**
      * Prepare for Dusk test execution.
@@ -48,7 +46,7 @@ abstract class DuskChromeTestCase extends BaseTestCase
             $_ENV['DUSK_DRIVER_URL'] ?? 'http://localhost:9515',
             DesiredCapabilities::chrome()->setCapability(
                 ChromeOptions::CAPABILITY, $options
-            )
+            ),90000, 90000
         );
     }
 
@@ -60,6 +58,6 @@ abstract class DuskChromeTestCase extends BaseTestCase
     protected function hasHeadlessDisabled()
     {
         return isset($_SERVER['DUSK_HEADLESS_DISABLED']) ||
-               isset($_ENV['DUSK_HEADLESS_DISABLED']);
+                isset($_ENV['DUSK_HEADLESS_DISABLED']);
     }
 }
