@@ -42,9 +42,11 @@ class TenantBookingTest extends DuskChromeTestCase
     public function testTenantBookingKost()
     {
         $this->browse(function ($browser) {
-            $browser->visit('/room/kost-kost-campur-murah-kost-zahira-papua')
-                ->assertSee('Kost Zahira Papua Yogyakarta')
+            $browser->visit('/room/kost-kota-yogyakarta-kost-putra-eksklusif-kos-duwa-tipe-1-tegalrejo-yogyakarta')
+                ->assertSee('Kos Duwa Tipe 1 Tegalrejo Yogyakarta')
                 ->assertVisible('.booking-card')
+
+                // Booking Card
                 ->with('.booking-card', function($card) {
                     $card->assertVisible('.track_request_booking')
                         ->click('.track_request_booking')
@@ -53,12 +55,13 @@ class TenantBookingTest extends DuskChromeTestCase
                         ->waitFor('.booking-rent-type__options')
                         ->assertVisible('.booking-rent-type__options')
                         ->with('.booking-rent-type__options', function($card) {
-                            $card->click('[data-path="rdb_quarterlyBookingOption"]');
+                            $card->click('[data-path="rdb_monthlyBookingOption"]');
                         })
-                        ->assertSee('Untuk hitungan sewa per 3 bulan, minimal durasi ngekos adalah 6 bulan.')
                         ->assertVisible('button.track_request_booking')
                         ->click('button.track_request_booking');
                 })
+
+                // Booking Container
                 ->waitFor('#bookingContainer')
                 ->assertVisible('#bookingContainer')
                 ->with('#bookingContainer', function($card) {
@@ -67,16 +70,24 @@ class TenantBookingTest extends DuskChromeTestCase
                         ->click('.track_next_booking');
                 })
                 ->assertVisible('.booking-summary__tnc')
-                ->assertVisible('#infoTnC_check')
+                
                 // ->with('.booking-summary__tnc', function($card) {
-                //     $card->assertVisible('input#infoTnC_check')
-                //         ->check('#infoTnC_check');
+                //     $card->assertVisible('.bg-c-checkbox');
                 // })
-                // ->assertVisible('.booking-summary__tnc')
+
+                // Check TnC
+                ->with('.bg-c-checkbox', function($card) {
+                    $card->click('.bg-c-checkbox__icon')
+                    ->pause('1000');
+                })
+
+                // Click Ajukan Sewa
+                ->with('.booking-summary__booking-action', function($card) {
+                    $card->waitFor('.bg-c-button')
+                    ->assertVisible('.bg-c-button')
+                    ->press('.bg-c-button');
+                })
                 ;
-                // ->press('.track_request_booking')
-                // ->waitFor('.booking-input-checkin-content')
-                // ->assertSee('Waktu mulai ngekos terdekat: di hari H setelah pengajuan sewa.');
         });
     }
 }
