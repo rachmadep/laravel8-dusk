@@ -68,8 +68,8 @@ class TenantBookingTest extends DuskChromeTestCase
                 ->assertVisible('#bookingContainer')
                 ->with('#bookingContainer', function($card) {
                     $card->assertVisible('.track_next_booking')
-                        ->waitUntilMissing('div.swal2-container')
-                        ->click('.track_next_booking');
+                        ->waitUntilMissing('div.swal2-container');
+                        // ->click('.track_next_booking');
                 })
                 ->waitFor('.booking-summary__tnc')
                 ->assertVisible('.booking-summary__tnc')
