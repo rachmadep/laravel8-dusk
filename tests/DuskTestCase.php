@@ -16,8 +16,6 @@ abstract class DuskTestCase extends BaseTestCase
     use CreatesApplication, SupportsFirefox, TogglesHeadlessMode;
     use DatabaseMigrations;
 
-    const DRIVER = 'chrome';
-
     /**
      * Prepare for Dusk test execution.
      *
@@ -30,7 +28,7 @@ abstract class DuskTestCase extends BaseTestCase
             return;
         }
 
-        switch (self::DRIVER) {
+        switch ($_SERVER['DUSK_BROWSER_DRIVER']) {
             case 'firefox':
                 static::startFirefoxDriver();
                 break;
@@ -49,7 +47,7 @@ abstract class DuskTestCase extends BaseTestCase
      */
     protected function driver()
     {
-        switch (self::DRIVER) {
+        switch ($_SERVER['DUSK_BROWSER_DRIVER']) {
             case 'firefox':
                 $webDriver = $this->firefoxDriver();
                 break;
